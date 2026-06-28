@@ -1,0 +1,296 @@
+classDiagram
+    direction TB
+
+    class BaseEntity {
+        <<abstract>>
+        +UUID id
+        +UUID createdBy
+        +Date createdAt
+        +UUID updatedBy
+        +Date updatedAt
+        +toResponse() Object
+    }
+
+    class Organization {
+        +String name
+        +String code
+        +UUID parentId
+        +String type
+        +String contact
+        +String phone
+        +String address
+        +String status
+        +Int sort
+    }
+
+    class User {
+        +String username
+        +String password
+        +String name
+        +String phone
+        +String email
+        +UUID orgId
+        +String avatar
+        +String status
+        +getRoles() Role[]
+    }
+
+    class Role {
+        +String name
+        +String code
+        +String description
+        +String status
+        +getPermissions() Permission[]
+    }
+
+    class Permission {
+        +String name
+        +String code
+        +String type
+        +UUID parentId
+        +Int sort
+    }
+
+    class Customer {
+        +String name
+        +String code
+        +String shortName
+        +String type
+        +String industry
+        +String region
+        +String level
+        +String source
+        +String status
+        +UUID projectId
+    }
+
+    class Contact {
+        +UUID customerId
+        +String name
+        +String position
+        +String phone
+        +String email
+        +Boolean isPrimary
+        +String remark
+    }
+
+    class Opportunity {
+        +UUID customerId
+        +String customerName
+        +String title
+        +Decimal amount
+        +String stage
+        +Decimal probability
+        +Date expectedDate
+        +String description
+        +String status
+    }
+
+    class Inquiry {
+        +String code
+        +UUID customerId
+        +String customerName
+        +UUID opportunityId
+        +String shelfType
+        +String requirement
+        +Int quantity
+        +String unit
+        +Date deliveryDate
+        +String status
+    }
+
+    class ShelfType {
+        +String name
+        +String code
+        +String category
+        +String description
+        +JSONB parameterTemplate
+        +String status
+    }
+
+    class ShelfConfig {
+        +UUID shelfTypeId
+        +String shelfTypeName
+        +String name
+        +JSONB parameters
+        +String status
+    }
+
+    class Specification {
+        +UUID shelfTypeId
+        +String name
+        +JSONB parameterConstraints
+        +JSONB structureTemplate
+    }
+
+    class Quotation {
+        +String code
+        +UUID inquiryId
+        +UUID customerId
+        +UUID shelfTypeId
+        +UUID configId
+        +Int quantity
+        +Decimal unitPrice
+        +Decimal totalPrice
+        +UUID currencyId
+        +Decimal exchangeRate
+        +Decimal margin
+        +Int deliveryDays
+        +Date validUntil
+        +Int version
+        +String status
+    }
+
+    class CostItem {
+        +UUID quotationId
+        +String category
+        +String name
+        +Decimal amount
+        +String unit
+        +String remark
+    }
+
+    class Contract {
+        +String code
+        +UUID quotationId
+        +UUID projectId
+        +UUID customerId
+        +String title
+        +Decimal amount
+        +UUID currencyId
+        +Date signDate
+        +Date deliveryDate
+        +String paymentTerms
+        +String status
+    }
+
+    class Project {
+        +String code
+        +String name
+        +UUID contractId
+        +UUID customerId
+        +UUID managerId
+        +Date startDate
+        +Date endDate
+        +Int progress
+        +String status
+    }
+
+    class BOM {
+        +UUID projectId
+        +UUID shelfConfigId
+        +Int version
+        +String status
+        +Decimal totalWeight
+        +Decimal totalCost
+    }
+
+    class BomItem {
+        +UUID bomId
+        +String partCode
+        +String partName
+        +String material
+        +String spec
+        +Decimal quantity
+        +String unit
+        +Decimal length
+        +Decimal weight
+        +Decimal unitCost
+        +Decimal totalCost
+        +Decimal wasteRate
+        +UUID parentId
+        +Int level
+        +Int sort
+    }
+
+    class WorkOrder {
+        +String code
+        +UUID projectId
+        +UUID bomId
+        +UUID shelfConfigId
+        +Int quantity
+        +Int completedQty
+        +String priority
+        +String status
+        +Date plannedStart
+        +Date plannedEnd
+    }
+
+    class Equipment {
+        +String name
+        +String code
+        +String type
+        +String workshop
+        +String status
+        +Int capacity
+        +Int currentLoad
+    }
+
+    class Warehouse {
+        +String name
+        +String code
+        +String type
+        +String address
+        +UUID managerId
+        +String status
+    }
+
+    class CostDimension {
+        +UUID projectId
+        +String category
+        +Decimal budgetAmount
+        +Decimal actualAmount
+        +Decimal committedAmount
+        +Decimal remainingBudget
+        +String period
+    }
+
+    BaseEntity <|-- Organization
+    BaseEntity <|-- User
+    BaseEntity <|-- Role
+    BaseEntity <|-- Customer
+    BaseEntity <|-- Contact
+    BaseEntity <|-- Opportunity
+    BaseEntity <|-- Inquiry
+    BaseEntity <|-- ShelfType
+    BaseEntity <|-- ShelfConfig
+    BaseEntity <|-- Specification
+    BaseEntity <|-- Quotation
+    BaseEntity <|-- Contract
+    BaseEntity <|-- Project
+    BaseEntity <|-- BOM
+    BaseEntity <|-- BomItem
+    BaseEntity <|-- WorkOrder
+    BaseEntity <|-- Equipment
+    BaseEntity <|-- Warehouse
+    BaseEntity <|-- CostDimension
+
+    Organization ||--o{ Organization : parent
+    Organization ||--o{ User : org
+    User }o--o{ Role : user_roles
+    Role }o--o{ Permission : role_permissions
+
+    Customer ||--o{ Contact : has
+    Customer ||--o{ Opportunity : has
+    Customer ||--o{ Inquiry : creates
+    Opportunity ||--o{ Inquiry : generates
+
+    ShelfType ||--o{ ShelfConfig : configured_as
+    ShelfType ||--o{ Specification : defined_by
+    ShelfConfig ||--o{ Quotation : quoted_in
+    ShelfConfig ||--o{ BOM : bom_for
+
+    Inquiry ||--o{ Quotation : quoted
+    Quotation ||--o{ CostItem : includes
+    Quotation ||--o{ Contract : contracted
+
+    Contract ||--o{ Project : generates
+    Project ||--o{ BOM : requires
+    Project ||--o{ WorkOrder : scheduled
+
+    BOM ||--o{ BomItem : contains
+    BomItem ||--o{ BomItem : parent_child
+    WorkOrder }o--|| Equipment : uses
+
+    Warehouse ||--o{ WarehouseLocation : has_locations
+    Project ||--o{ CostDimension : tracks_cost

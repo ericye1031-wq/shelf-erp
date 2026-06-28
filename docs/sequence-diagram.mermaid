@@ -1,0 +1,44 @@
+sequenceDiagram
+    participant C as 客户
+    participant S as 销售
+    participant E as 工程师
+    participant Sys as 后端系统
+    participant M as 生产
+
+    C->>S: 询价需求
+    S->>Sys: POST /api/m02/inquiries 创建询价单
+    Sys-->>S: 返回询价单
+    S->>E: 分配工程师
+    E->>Sys: GET /api/m04/shelf-types 获取货架类型
+    Sys-->>E: 返回货架类型列表
+    E->>Sys: POST /api/m04/configs 创建配置
+    Sys-->>E: 返回配置
+    E->>Sys: POST /api/m04/configs/:id/calculate-bom BOM计算
+    Sys-->>E: 返回BOM计算结果
+    E->>Sys: POST /api/m04/configs/:id/match-spec 规格匹配
+    Sys-->>E: 返回匹配结果
+    E->>S: 提交BOM结果
+    S->>Sys: POST /api/m05/quotations 创建报价单
+    Sys-->>S: 返回报价单
+    S->>Sys: POST /api/m05/quotations/:id/submit 提交报价
+    Sys-->>S: 报价状态=active
+    S->>C: 发送报价
+    C->>S: 确认报价
+    S->>Sys: POST /api/m06/contracts 创建合同
+    Sys-->>S: 返回合同
+    S->>Sys: POST /api/m06/contracts/:id/submit 提交审批
+    Sys-->>S: 合同状态=reviewing
+    Note over Sys: 审批通过
+    Sys->>Sys: POST /api/m06/contracts/:id/approve
+    S->>Sys: POST /api/m07/projects 创建项目
+    Sys-->>S: 返回项目
+    S->>Sys: POST /api/m08/boms 创建BOM
+    Sys-->>S: 返回BOM
+    M->>Sys: POST /api/m10/work-orders 创建工单
+    Sys-->>M: 返回工单
+    M->>Sys: GET /api/m10/work-orders/:id/material-demands 查看物料需求
+    Sys-->>M: 返回物料需求
+    M->>Sys: POST /api/m11/pda-operations 领料
+    Sys-->>M: 库存更新
+    M->>Sys: POST /api/m10/scan-records 报工
+    Sys-->>M: 工序状态更新

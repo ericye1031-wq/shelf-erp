@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>货架制造业ERP一体化系统 — 软件需求规格说明书 (SRS)</title>
+<style>
+:root{--bg:#fff;--bg2:#f8f9fa;--bg3:#f0f2f5;--text:#1a1a2e;--text2:#4a4a6a;--text3:#7a7a9a;--border:#e2e4e8;--accent:#2563eb;--accent2:#1d4ed8;--green:#059669;--amber:#d97706;--red:#dc2626;--purple:#7c3aed}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;font-size:15px;line-height:1.75;color:var(--text);background:var(--bg2)}
+.page{max-width:960px;margin:0 auto;padding:60px 40px}
+.cover{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;text-align:center;padding:100px 60px 80px;border-radius:0 0 24px 24px}
+.cover h1{font-size:36px;font-weight:700;margin-bottom:16px;letter-spacing:2px}
+.cover .sub{font-size:18px;color:#94a3b8;margin-bottom:40px}
+.cover .meta{font-size:14px;color:#64748b;line-height:2}
+.cover .meta span{display:inline-block;margin:0 16px}
+.cover .badge{display:inline-block;background:rgba(37,99,235,.3);color:#93c5fd;padding:4px 16px;border-radius:20px;font-size:13px;margin:4px}
+nav.toc{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:32px 40px;margin-bottom:40px}
+nav.toc h2{font-size:20px;margin-bottom:16px}
+nav.toc ol{padding-left:20px}
+nav.toc li{margin:6px 0;font-size:14px}
+nav.toc a{color:var(--accent);text-decoration:none}
+nav.toc a:hover{text-decoration:underline}
+section{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:40px;margin-bottom:32px}
+section h2{font-size:24px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--accent)}
+section h3{font-size:18px;margin:28px 0 12px}
+section h4{font-size:15px;color:var(--text2);margin:16px 0 8px}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+th,td{border:1px solid var(--border);padding:8px 12px;text-align:left}
+th{background:var(--bg3);font-weight:600;color:var(--text2);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+tr:hover{background:#f8fafc}
+.flow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0;font-size:13px}
+.flow-node{background:var(--accent);color:#fff;padding:6px 16px;border-radius:6px;white-space:nowrap}
+.flow-arrow{color:var(--text3);font-size:18px}
+.badge-core{background:#fef2f2;color:var(--red);border:1px solid #fecaca;display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.badge-p0{background:#fef2f2;color:#dc2626;display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.badge-p1{background:#fffbeb;color:#d97706;display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.badge-p2{background:#f0fdf4;color:#059669;display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.badge-p3{background:#eff6ff;color:#2563eb;display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.highlight{background:#fefce8;border-left:4px solid #eab308;padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0;font-size:14px}
+.info-box{background:#eff6ff;border-left:4px solid var(--accent);padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0;font-size:14px}
+@media print{body{background:#fff}section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="cover">
+<h1>货架制造业ERP一体化系统</h1>
+<p class="sub">软件需求规格说明书 Software Requirements Specification</p>
+<div><span class="badge">ERP+MES+WMS+CRM+财务一体化</span><span class="badge">多公司·多工厂·多仓库</span><span class="badge">AI驱动报价与排产</span></div>
+<div class="meta" style="margin-top:32px"><span>版本:V1.0</span><span>日期:2026-06-16</span><span>密级:内部</span><span>文档编号:QINC-ERP-SRS-001</span></div>
+</div>
+
+<div class="page">
+<nav class="toc"><h2>目录</h2><ol>
+<li><a href="#s1">总体架构</a></li><li><a href="#s2">销售CRM模块</a></li><li><a href="#s3">方案设计模块</a></li><li><a href="#s4">货架配置器（核心）</a></li><li><a href="#s5">报价系统（核心）</a></li><li><a href="#s6">合同管理</a></li><li><a href="#s7">项目管理模块</a></li><li><a href="#s8">采购管理</a></li><li><a href="#s9">生产MES模块（重点详细设计）</a></li><li><a href="#s10">BOM管理</a></li><li><a href="#s11">库存WMS</a></li><li><a href="#s12">成本核算（重点）</a></li><li><a href="#s13">财务模块</a></li><li><a href="#s14">人力资源管理</a></li><li><a href="#s15">安装管理</a></li><li><a href="#s16">售后管理</a></li><li><a href="#s17">BI数据分析</a></li><li><a href="#s18">数据库设计</a></li><li><a href="#s19">权限设计</a></li><li><a href="#s20">最终输出与实施路线</a></li>
+</ol></nav>
+
+<!-- ===== SECTION 1 ===== -->
+<section id="s1"><h2>一、总体架构</h2>
+<h3>1.1 技术选型</h3>
+<table>
+<tr><th>层级</th><th>技术栈</th><th>说明</th></tr>
+<tr><td>前端</td><td>React 18 + TypeScript + Vite 5 + Ant Design Pro</td><td>ERP管理端</td></tr>
+<tr><td>移动端</td><td>React Native / UniApp</td><td>销售外勤、安装现场</td></tr>
+<tr><td>PDA</td><td>Flutter / Android原生</td><td>仓库扫码、工序报工</td></tr>
+<tr><td>电子看板</td><td>Vue 3 + ECharts + DataV</td><td>车间大屏、驾驶舱</td></tr>
+<tr><td>后端</td><td>Java 17 + Spring Boot 3 + Spring Cloud</td><td>微服务架构</td></tr>
+<tr><td>ORM</td><td>MyBatis-Plus + JPA</td><td>数据持久化</td></tr>
+<tr><td>数据库</td><td>PostgreSQL 15 + TimescaleDB</td><td>主库+时序数据</td></tr>
+<tr><td>缓存</td><td>Redis 7 + Redisson</td><td>分布式锁、会话、热数据</td></tr>
+<tr><td>消息队列</td><td>RabbitMQ / Kafka</td><td>异步任务、事件驱动</td></tr>
+<tr><td>文件存储</td><td>MinIO (S3兼容)</td><td>图纸、PDF、图片</td></tr>
+<tr><td>搜索引擎</td><td>Elasticsearch</td><td>全文检索、日志分析</td></tr>
+<tr><td>容器编排</td><td>Docker + Kubernetes</td><td>部署运维</td></tr>
+<tr><td>CI/CD</td><td>GitLab CI / Jenkins</td><td>持续集成部署</td></tr>
+</table>
+
+<h3>1.2 微服务划分（17个核心服务）</h3>
+<table>
+<tr><th>服务名称</th><th>职责</th><th>部署实例</th></tr>
+<tr><td>qinc-gateway</td><td>API网关、限流、鉴权、路由</td><td>2</td></tr>
+<tr><td>qinc-auth</td><td>统一认证、RBAC权限、SSO</td><td>2</td></tr>
+<tr><td>qinc-mdm</td><td>主数据：组织、人员、客户、供应商、物料</td><td>2</td></tr>
+<tr><td>qinc-crm</td><td>客户管理、商机、询价、报价</td><td>2</td></tr>
+<tr><td>qinc-design</td><td>方案设计、图纸管理、版本追溯</td><td>1</td></tr>
+<tr><td>qinc-configurator</td><td>货架配置器、自动BOM生成</td><td>2</td></tr>
+<tr><td>qinc-bom</td><td>BOM管理、EBOM/MBOM/CBOM</td><td>2</td></tr>
+<tr><td>qinc-contract</td><td>合同管理、回款计划</td><td>1</td></tr>
+<tr><td>qinc-project</td><td>项目管理、甘特图、成本控制</td><td>2</td></tr>
+<tr><td>qinc-purchase</td><td>采购管理、供应商SRM</td><td>2</td></tr>
+<tr><td>qinc-mes</td><td>生产执行：工单、工序、报工、设备</td><td>3</td></tr>
+<tr><td>qinc-wms</td><td>仓储管理：出入库、盘点、库位</td><td>2</td></tr>
+<tr><td>qinc-cost</td><td>成本核算引擎</td><td>2</td></tr>
+<tr><td>qinc-finance</td><td>财务总账、应收应付、税务</td><td>2</td></tr>
+<tr><td>qinc-hr</td><td>人力资源、考勤、薪酬</td><td>1</td></tr>
+<tr><td>qinc-install</td><td>安装管理、现场服务</td><td>1</td></tr>
+<tr><td>qinc-bi</td><td>BI分析、大屏驾驶舱</td><td>2</td></tr>
+</table>
+
+<h3>1.3 多组织架构支持</h3>
+<table>
+<tr><th>维度</th><th>实现方式</th><th>数据隔离</th></tr>
+<tr><td>多公司</td><td>tenant_id + company_id 两级租户</td><td>行级安全策略(RLS)</td></tr>
+<tr><td>多工厂</td><td>工厂主数据，关联产线/设备/人员</td><td>company_id + plant_id</td></tr>
+<tr><td>多仓库</td><td>仓库主数据，关联库区/库位</td><td>plant_id + warehouse_id</td></tr>
+<tr><td>多币种</td><td>币种主数据 + 汇率表，支持实时汇率</td><td>所有金额字段含currency_code</td></tr>
+<tr><td>多税率</td><td>税率主数据，按品类/地区/客户</td><td>关联物料类别和客户类型</td></tr>
+<tr><td>多项目</td><td>项目维度贯穿全模块</td><td>project_id 作为核心关联字段</td></tr>
+</table>
+
+<div class="info-box"><strong>架构关键决策：</strong>项目编号(project_id) 是整个系统的核心关联键，从询价→报价→合同→BOM→采购→生产→发货→安装→售后，全程贯穿。每个业务单据都携带 project_id。</div>
+
+<h3>1.4 系统整体架构图（五层架构）</h3>
+<svg viewBox="0 0 680 480" width="100%" role="img"><defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+<rect x="40" y="10" width="600" height="55" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/><text font-family="sans-serif" font-size="14" font-weight="500" x="340" y="28" text-anchor="middle" fill="#3C3489">接入层 — Web PC / 移动APP / PDA / 电子看板 / 客户门户</text><text font-family="sans-serif" font-size="12" x="340" y="48" text-anchor="middle" fill="#534AB7">Nginx → Gateway(Spring Cloud Gateway) → 统一鉴权 → 限流熔断</text>
+<rect x="40" y="80" width="600" height="130" rx="10" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/><text font-family="sans-serif" font-size="14" font-weight="500" x="340" y="98" text-anchor="middle" fill="#085041">业务中台层 — ERP + CRM + SRM + HRM + OA</text>
+<rect x="55" y="112" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="110" y="128" text-anchor="middle" fill="#27500A">销售CRM</text>
+<rect x="175" y="112" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="230" y="128" text-anchor="middle" fill="#27500A">方案设计</text>
+<rect x="295" y="112" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="350" y="128" text-anchor="middle" fill="#27500A">报价引擎</text>
+<rect x="415" y="112" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="470" y="128" text-anchor="middle" fill="#27500A">合同管理</text>
+<rect x="535" y="112" width="90" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="580" y="128" text-anchor="middle" fill="#27500A">项目管理</text>
+<rect x="55" y="154" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="110" y="170" text-anchor="middle" fill="#27500A">采购SRM</text>
+<rect x="175" y="154" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="230" y="170" text-anchor="middle" fill="#27500A">财务总账</text>
+<rect x="295" y="154" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="350" y="170" text-anchor="middle" fill="#27500A">人力资源</text>
+<rect x="415" y="154" width="110" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="470" y="170" text-anchor="middle" fill="#27500A">安装管理</text>
+<rect x="535" y="154" width="90" height="32" rx="6" fill="#C0DD97" stroke="#639922" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="580" y="170" text-anchor="middle" fill="#27500A">售后管理</text>
+<rect x="40" y="225" width="600" height="65" rx="10" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/><text font-family="sans-serif" font-size="14" font-weight="500" x="340" y="243" text-anchor="middle" fill="#633806">制造执行与仓储层 — MES + WMS + QMS</text>
+<rect x="55" y="255" width="175" height="28" rx="6" fill="#FAC775" stroke="#EF9F27" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="142" y="270" text-anchor="middle" fill="#633806">MES 生产制造执行</text>
+<rect x="250" y="255" width="175" height="28" rx="6" fill="#FAC775" stroke="#EF9F27" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="337" y="270" text-anchor="middle" fill="#633806">WMS 仓储管理</text>
+<rect x="445" y="255" width="180" height="28" rx="6" fill="#FAC775" stroke="#EF9F27" stroke-width="0.5"/><text font-family="sans-serif" font-size="12" x="535" y="270" text-anchor="middle" fill="#633806">QMS 质量管理</text>
+<rect x="40" y="305" width="600" height="55" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/><text font-family="sans-serif" font-size="14" font-weight="500" x="340" y="323" text-anchor="middle" fill="#0C447C">数据中台层 — 主数据 / 数据仓库 / 规则引擎 / AI模型</text><text font-family="sans-serif" font-size="12" x="340" y="343" text-anchor="middle" fill="#185FA5">BOM中心 / 产品参数库 / 报价规则库 / 工艺路线库 / 成本模型库</text>
+<rect x="40" y="375" width="600" height="45" rx="10" fill="#ECE7FA" stroke="#7F77DD" stroke-width="0.5"/><text font-family="sans-serif" font-size="14" font-weight="500" x="340" y="393" text-anchor="middle" fill="#26215C">数据智能层 — BI决策分析 / AI自动报价 / AI智能排产 / AI成本预测</text>
+<rect x="40" y="435" width="600" height="38" rx="10" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/><text font-family="sans-serif" font-size="14" font-weight="500" x="340" y="454" text-anchor="middle" fill="#2C2C2A">基础设施 — 多公司·多工厂·多仓库·多币种 | PostgreSQL + Redis + MinIO + K8s</text>
+</svg>
+
+<h3>1.5 主数据架构（MDM）</h3>
+<table>
+<tr><th>主数据域</th><th>核心实体</th><th>管理模块</th></tr>
+<tr><td>组织</td><td>公司、部门、工厂、仓库、产线、班组</td><td>MDM</td></tr>
+<tr><td>人员</td><td>员工、用户、角色、权限</td><td>认证中心</td></tr>
+<tr><td>客商</td><td>客户、供应商、联系人、地址</td><td>CRM/SRM</td></tr>
+<tr><td>物料</td><td>原材料、半成品、成品、辅料、备件</td><td>MDM</td></tr>
+<tr><td>产品</td><td>货架类型、规格参数、标准BOM</td><td>配置器</td></tr>
+<tr><td>工艺</td><td>工序、工艺路线、标准工时、设备</td><td>MES</td></tr>
+<tr><td>财务</td><td>科目、币种、税率、成本中心</td><td>财务</td></tr>
+<tr><td>价格</td><td>材料价格、加工单价、喷涂单价</td><td>成本</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 2: CRM ===== -->
+<section id="s2"><h2>二、销售CRM模块</h2>
+<h3>2.1 客户管理</h3>
+<table>
+<tr><th>功能点</th><th>字段/规则</th></tr>
+<tr><td>客户档案</td><td>客户编码、全称、统一社会信用代码、行业分类、客户类型（终端/贸易商/工程公司）、区域、国家、来源渠道</td></tr>
+<tr><td>联系人管理</td><td>姓名、职务、手机、邮箱、微信、决策角色</td></tr>
+<tr><td>客户等级</td><td>A(战略)/B(重点)/C(普通)/D(潜在)，基于累计交易额、回款及时率、利润率三维评分</td></tr>
+<tr><td>信用额度</td><td>授信总额、已用额度、预警比例(80%)、冻结标志</td></tr>
+<tr><td>客户账期</td><td>账期天数、起算方式（开票日/发货日/签收日）</td></tr>
+<tr><td>地址管理</td><td>开票地址、收货地址、安装地址（多地址簿）</td></tr>
+</table>
+<h3>2.2 商机管理</h3>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>商机创建</td><td>商机名称、预计金额、预计成交日期、成功率(%)、来源（展会/老客户/网络/转介绍）</td></tr>
+<tr><td>跟进记录</td><td>时间、跟进方式（电话/拜访/邮件）、内容摘要、下一步计划</td></tr>
+<tr><td>竞争分析</td><td>竞争对手、竞品信息、我方优势/劣势、应对策略</td></tr>
+<tr><td>商机阶段</td><td>初步接触→需求确认→方案提交→报价谈判→商务评审→合同签订→赢单/丢单</td></tr>
+<tr><td>丢单分析</td><td>丢单原因分类（价格/方案/交期/关系/资质），记录经验教训</td></tr>
+</table>
+<h3>2.3 询价管理</h3>
+<div class="flow"><span class="flow-node">客户提交询价</span><span class="flow-arrow">→</span><span class="flow-node">系统生成RFQ编号</span><span class="flow-arrow">→</span><span class="flow-node">销售审核分配</span><span class="flow-arrow">→</span><span class="flow-node">方案设计</span><span class="flow-arrow">→</span><span class="flow-node">报价输出</span></div>
+<table>
+<tr><th>字段</th><th>说明</th></tr>
+<tr><td>询价编号</td><td>RFQ + 年月日 + 流水(4位)，如 RFQ202606160001</td></tr>
+<tr><td>客户信息</td><td>关联客户档案（新客户自动创建临时档案）</td></tr>
+<tr><td>货架类型</td><td>横梁式/驶入式/穿梭车/自动化立库/阁楼平台/钢平台/流利式/悬臂/重型/中型/轻型/钢托盘/非标料架</td></tr>
+<tr><td>需求描述</td><td>货架规格、承载要求、数量、交期要求（长文本）</td></tr>
+<tr><td>附件</td><td>图纸(DWG/PDF)、清单(Excel)、RFQ文档、现场照片</td></tr>
+<tr><td>询价状态</td><td>待报价 / 报价中 / 已报价 / 已成交 / 已失单</td></tr>
+<tr><td>时效管理</td><td>报价有效期（默认30天）、超期自动提醒、报价超时预警（48h未响应）</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 3: 方案设计 ===== -->
+<section id="s3"><h2>三、方案设计模块</h2>
+<h3>3.1 方案管理</h3>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>方案创建</td><td>基于询价单创建方案，关联项目</td></tr>
+<tr><td>图纸上传</td><td>支持 DWG/DXF、SolidWorks(SLDPRT/SLDASM)、STEP/IGES、PDF、JPG/PNG</td></tr>
+<tr><td>在线预览</td><td>AutoCAD Viewer API集成（DWG在线预览）、PDF.js预览、3D轻量化预览</td></tr>
+<tr><td>方案版本</td><td>V1.0 → V1.1 → V2.0，每次保存生成新版本</td></tr>
+<tr><td>版本追溯</td><td>修改人、修改时间、修改内容摘要、变更前后对比</td></tr>
+<tr><td>审核流程</td><td>设计员提交→设计经理审核→技术总监批准（按金额分级）</td></tr>
+</table>
+<h3>3.2 图纸管理（PDM轻量版）</h3>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>图纸编码</td><td>DWG-项目号-类别-流水，如 DWG-P2026001-ST-001</td></tr>
+<tr><td>图纸分类</td><td>总装图、部件图、零件图、安装图、基础图</td></tr>
+<tr><td>图纸状态</td><td>设计中→待审核→已发布→已废止</td></tr>
+<tr><td>存储策略</td><td>MinIO + 本地缓存，图纸按项目/类型分桶存储</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 4: 配置器 ===== -->
+<section id="s4"><h2>四、货架配置器（核心） <span class="badge-core">核心</span></h2>
+<h3>4.1 产品参数库（支持13种货架类型）</h3>
+<table>
+<tr><th>货架类型</th><th>关键参数</th></tr>
+<tr><td>横梁式货架</td><td>立柱规格(截面/壁厚/高度)、横梁规格(截面/长度)、层数、每层载重(kg)、深度、表面处理、颜色</td></tr>
+<tr><td>驶入式货架</td><td>立柱规格、导轨规格、托盘尺寸、进深位数、层数、每托盘位载重</td></tr>
+<tr><td>穿梭车货架</td><td>立柱规格、导轨规格、穿梭车型号、货位深度、层数、控制方式</td></tr>
+<tr><td>自动化立库</td><td>货位尺寸、堆垛机型号、输送线规格、WCS接口、库位数、出入库频率</td></tr>
+<tr><td>阁楼平台</td><td>楼层数、柱距、主梁/次梁规格、楼板类型(钢格栅/花纹板)、栏杆、楼梯</td></tr>
+<tr><td>钢平台</td><td>柱距、主梁/次梁规格(HN型钢)、楼板类型、荷载设计值(kN/m²)</td></tr>
+<tr><td>流利式货架</td><td>立柱规格、流利条型号/长度、倾斜角度、层数、每层载重</td></tr>
+<tr><td>悬臂货架</td><td>立柱规格(单面/双面)、悬臂规格(长度/间距)、层数、每臂载重</td></tr>
+<tr><td>重型货架</td><td>立柱规格、横梁规格、层数、每层载重(1000kg+)</td></tr>
+<tr><td>中型货架</td><td>立柱规格、层板规格、层数、每层载重(200-800kg)</td></tr>
+<tr><td>轻型货架</td><td>立柱规格、层板规格、层数、每层载重(&lt;200kg)</td></tr>
+<tr><td>钢托盘</td><td>面板规格(厚度/材质)、支腿规格(截面/高度)、动载/静载/货架载(kg)、堆叠层数、表面处理(镀锌/喷塑)、叉车孔方向(双向/四向)、是否带防滑垫</td></tr>
+<tr><td>非标料架</td><td>定制结构类型、物料尺寸范围(长/宽/高)、承载方式(悬挂/层叠/平放)、管材/型材规格、连接方式、表面处理、是否可移动(带脚轮)</td></tr>
+</table>
+
+<h3>4.2 自动BOM计算引擎</h3>
+<div class="highlight"><strong>目标：</strong>基于货架类型+规格参数，自动展开BOM，计算所有物料用量，误差&lt;1%。</div>
+<p><strong>计算逻辑（五步法）：</strong></p>
+<ol style="margin:0 0 0 20px;counter-reset:step">
+<li style="margin:8px 0"><strong>参数解析</strong> — 读取货架类型、规格、层数、载重等需求参数</li>
+<li style="margin:8px 0"><strong>规格匹配</strong> — 根据载重要求，从钢材型号库匹配最小满足强度的规格（GB50017验算）</li>
+<li style="margin:8px 0"><strong>结构展开</strong> — 计算立柱/横梁/层板/连接件数量</li>
+<li style="margin:8px 0"><strong>配件计算</strong> — 地脚螺栓、安全销、护角、防撞栏、标识牌</li>
+<li style="margin:8px 0"><strong>损耗追加</strong> — 按物料类型追加损耗率（钢板3%、型钢2%、喷粉5%）</li>
+</ol>
+
+<h3>4.3 计算示例（横梁式货架，10列×2排×4层）</h3>
+<table>
+<tr><th>物料</th><th>规格</th><th>单件用量</th><th>总数量</th><th>计算依据</th></tr>
+<tr><td>立柱</td><td>80×60×2.5×6000</td><td>2根/列</td><td>40根</td><td>10列×2排×2根</td></tr>
+<tr><td>横梁</td><td>80×50×2.0×2700</td><td>4根/层·列</td><td>160根</td><td>10×2×4层×2根(前后)</td></tr>
+<tr><td>层板</td><td>SPCC 1.5mm</td><td>2块/层</td><td>40块</td><td>10×2×2块</td></tr>
+<tr><td>柱卡(连接件)</td><td>3.0mm冲压</td><td>8个/列</td><td>160个</td><td>10×2×4层×2端</td></tr>
+<tr><td>安全销</td><td>M8×60</td><td>16个/列</td><td>320个</td><td>每柱卡2个</td></tr>
+<tr><td>地脚螺栓</td><td>M12×100膨胀</td><td>4个/列</td><td>80个</td><td>每列2根立柱×2个</td></tr>
+<tr><td>护角</td><td>H300×3.0</td><td>4个/列</td><td>80个</td><td>每列4角</td></tr>
+<tr><td>背拉杆</td><td>40×40×1.5×1000</td><td>2根/列</td><td>40根</td><td>每列2根(上下)</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 5: 报价系统 ===== -->
+<section id="s5"><h2>五、报价系统（核心） <span class="badge-core">核心</span></h2>
+<h3>5.1 报价引擎架构</h3>
+<div class="flow"><span class="flow-node">读取BOM</span><span class="flow-arrow">→</span><span class="flow-node">材料成本</span><span class="flow-arrow">→</span><span class="flow-node">加工成本</span><span class="flow-arrow">→</span><span class="flow-node">喷涂/表面处理</span><span class="flow-arrow">→</span><span class="flow-node">包装运输</span><span class="flow-arrow">→</span><span class="flow-node">安装成本</span><span class="flow-arrow">→</span><span class="flow-node">税费+管理费</span><span class="flow-arrow">→</span><span class="flow-node">利润加成</span><span class="flow-arrow">→</span><span class="flow-node">报价单</span></div>
+
+<h3>5.2 成本构成模型</h3>
+<table>
+<tr><th>成本项</th><th>计算方式</th><th>数据来源</th></tr>
+<tr><td>材料成本</td><td>Σ(物料数量 × 材料单价) × (1 + 损耗率)</td><td>采购价格库 + 钢材行情API</td></tr>
+<tr><td>加工成本</td><td>Σ(工序标准工时 × 工序工时单价)</td><td>工艺路线库 + MES工时统计</td></tr>
+<tr><td>喷涂成本</td><td>喷涂面积(m²) × 喷涂单价(元/m²)</td><td>面积自动计算 + 喷涂单价库</td></tr>
+<tr><td>包装成本</td><td>按货架类型定额：重型30元/吨、中型45元/吨、轻型60元/吨</td><td>包装定额表</td></tr>
+<tr><td>运输成本</td><td>按距离/重量/体积，对接物流API</td><td>物流报价库 + 里程API</td></tr>
+<tr><td>安装成本</td><td>安装工程量 × 安装人工单价 + 安装辅材</td><td>安装定额库</td></tr>
+<tr><td>管理费用</td><td>(以上合计) × 管理费率（默认8%）</td><td>财务系数配置</td></tr>
+<tr><td>利润</td><td>(以上合计) × 目标利润率（默认15%）</td><td>按客户等级可调整</td></tr>
+<tr><td>税费</td><td>(以上合计) × 增值税率（13%）</td><td>税率配置</td></tr>
+</table>
+
+<h3>5.3 多币种与版本管理</h3>
+<table>
+<tr><th>币种</th><th>汇率来源</th><th>更新频率</th></tr>
+<tr><td>人民币(CNY)</td><td>本位币</td><td>-</td></tr>
+<tr><td>美元(USD)</td><td>中国银行外汇牌价API</td><td>每日</td></tr>
+<tr><td>欧元(EUR)</td><td>中国银行外汇牌价API</td><td>每日</td></tr>
+</table>
+<p style="margin-top:12px"><strong>报价版本：</strong>V1(首次报价)→V2(商务调整)→V3(最终确认)。任意两版本自动差异比较，高亮金额变化。报价误差控制目标：&lt;3%。</p>
+</section>
+
+<!-- ===== SECTION 6: 合同 ===== -->
+<section id="s6"><h2>六、合同管理</h2>
+<table>
+<tr><th>合同类型</th><th>核心字段</th></tr>
+<tr><td>销售合同</td><td>合同编号(HT+年月+流水)、甲乙方信息、货架规格明细、总价、付款方式、交期、质保期、验收标准</td></tr>
+<tr><td>采购合同</td><td>采购合同编号(CGHT+流水)、供应商信息、物料明细、单价、交期、付款条件</td></tr>
+<tr><td>安装合同</td><td>安装合同编号(AZHT+流水)、安装范围、工期、人员配置、安全条款</td></tr>
+</table>
+<h3>6.1 回款与发票</h3>
+<table>
+<tr><th>付款节点</th><th>比例</th><th>触发条件</th></tr>
+<tr><td>预付款</td><td>30%</td><td>合同签订后</td></tr>
+<tr><td>发货款</td><td>40%</td><td>货物出厂前</td></tr>
+<tr><td>验收款</td><td>25%</td><td>客户签收验收后</td></tr>
+<tr><td>质保金</td><td>5%</td><td>质保期满后</td></tr>
+</table>
+<p>合同生效后自动生成项目编号：<code>P+年份+流水</code>，如 <code>P20260001</code>。</p>
+</section>
+
+<!-- ===== SECTION 7: 项目管理 ===== -->
+<section id="s7"><h2>七、项目管理模块</h2>
+<h3>7.1 项目阶段与里程碑</h3>
+<table>
+<tr><th>阶段</th><th>开始条件</th><th>结束条件</th><th>关键输出</th></tr>
+<tr><td>方案设计</td><td>询价接收</td><td>方案审核通过</td><td>方案图纸、BOM初版</td></tr>
+<tr><td>报价</td><td>BOM确认</td><td>客户确认报价</td><td>报价单</td></tr>
+<tr><td>合同</td><td>报价确认</td><td>合同双方签署</td><td>销售合同</td></tr>
+<tr><td>采购</td><td>MBOM发布</td><td>所有物料到齐</td><td>采购订单、入库单</td></tr>
+<tr><td>生产</td><td>物料齐套</td><td>成品入库</td><td>完工报告、质检报告</td></tr>
+<tr><td>发货</td><td>成品入库</td><td>物流签收</td><td>发货单、物流单</td></tr>
+<tr><td>安装</td><td>货物到达现场</td><td>安装完成</td><td>安装验收单</td></tr>
+<tr><td>验收</td><td>安装完成</td><td>客户签收确认</td><td>竣工验收报告</td></tr>
+<tr><td>售后</td><td>验收完成</td><td>质保期结束</td><td>质保完结报告</td></tr>
+</table>
+<h3>7.2 管理功能</h3>
+<ul style="margin:16px;padding-left:20px">
+<li><strong>甘特图：</strong>各阶段计划/实际日期可视化，延期红色预警</li>
+<li><strong>成本控制：</strong>预算vs实际成本实时对比，分项偏差分析</li>
+<li><strong>利润分析：</strong>合同金额 - 实际成本 = 项目利润，实时计算</li>
+<li><strong>项目预警：</strong>进度延期>3天、成本超支>5%、物料延期、质量问题自动预警</li>
+</ul>
+</section>
+
+<!-- ===== SECTION 8-20: COMPACT FOR SIZE ===== -->
+<section id="s8"><h2>八、采购管理</h2>
+<h3>8.1 供应商管理</h3>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>供应商档案</td><td>供应商编码、全称、统一社会信用代码、供货物料类别、联系人、银行账户</td></tr>
+<tr><td>供应商评级</td><td>A(战略)/B(优质)/C(合格)/D(观察)，基于：交期达成率(40%)+质量合格率(30%)+价格竞争力(20%)+服务响应(10%)</td></tr>
+<tr><td>供应商价格库</td><td>物料编码+供应商+单价+有效期+最小起订量+币种</td></tr>
+<tr><td>供应商交期库</td><td>物料编码+供应商+标准交期(天)+加急交期+历史达成率</td></tr>
+</table>
+<h3>8.2 采购流程</h3>
+<div class="flow"><span class="flow-node">MRP需求</span><span class="flow-arrow">→</span><span class="flow-node">采购申请</span><span class="flow-arrow">→</span><span class="flow-node">询比价</span><span class="flow-arrow">→</span><span class="flow-node">审批</span><span class="flow-arrow">→</span><span class="flow-node">采购订单</span><span class="flow-arrow">→</span><span class="flow-node">来料检验</span><span class="flow-arrow">→</span><span class="flow-node">入库</span><span class="flow-arrow">→</span><span class="flow-node">对账付款</span></div>
+<table>
+<tr><th>节点</th><th>功能</th><th>审批规则</th></tr>
+<tr><td>采购申请</td><td>来源：MRP运算/手动创建，含物料/数量/需求日期/建议供应商</td><td>金额&lt;1万:采购经理；1-10万:副总；>10万:总经理</td></tr>
+<tr><td>询比价</td><td>向≥3家供应商询价，记录报价，自动比价排名</td><td>-</td></tr>
+<tr><td>采购订单</td><td>自动生成PO编号(PO+年月+流水)，关联合同/项目</td><td>同上审批流</td></tr>
+<tr><td>来料检验</td><td>检验：外观/尺寸/材质(光谱仪)/镀层厚度/数量</td><td>质检员判定：合格/让步接收/退货</td></tr>
+<tr><td>对账</td><td>采购订单 vs 入库单 vs 供应商发票 三单匹配</td><td>财务审核</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 9: MES ===== -->
+<section id="s9"><h2>九、生产MES模块（重点详细设计） <span class="badge-core">核心</span></h2>
+
+<h3>9.1 货架生产工艺 — 14道工序完整定义</h3>
+<div style="overflow-x:auto">
+<table style="min-width:1100px">
+<tr><th>序号</th><th>工序编码</th><th>名称</th><th>标准工时</th><th>设备类型</th><th>设备产能</th><th>质量关键点</th><th>报工方式</th><th>设备接口</th></tr>
+<tr><td>1</td><td>OP-010</td><td>开平</td><td>0.5min/m</td><td>开平机(纵剪线)</td><td>8000m/班</td><td>板面平整度≤2mm/m、对角线≤3mm、毛刺≤0.3mm</td><td>扫码+PLC计数</td><td>Modbus TCP/OPC-UA</td></tr>
+<tr><td>2</td><td>OP-020</td><td>分条</td><td>0.3min/m</td><td>分条机</td><td>12000m/班</td><td>宽度公差±0.3mm、切口整齐无毛刺</td><td>扫码+PLC计数</td><td>Modbus TCP</td></tr>
+<tr><td>3</td><td>OP-035</td><td>冷弯成型</td><td>2.0min/件</td><td>冷弯成型机(辊压线)</td><td>300件/班</td><td>截面尺寸公差±0.5mm、弯曲角度±1°、表面无划伤压痕、直线度≤1mm/m</td><td>扫码+PLC计数</td><td>Modbus TCP/OPC-UA</td></tr>
+<tr><td>4</td><td>OP-030</td><td>冲孔</td><td>0.8min/件</td><td>数控冲床/多工位冲孔线</td><td>600件/班</td><td>孔位公差±0.5mm、孔径+0.1mm、孔距±0.5mm</td><td>扫码+设备计数</td><td>数控系统(SIEMENS/FANUC)</td></tr>
+<tr><td>5</td><td>OP-040</td><td>折弯</td><td>1.2min/件</td><td>数控折弯机(100T/160T)</td><td>400件/班</td><td>角度±1°、直线度≤1mm/m、折弯半径符合图纸</td><td>扫码+设备计数</td><td>数控系统</td></tr>
+<tr><td>6</td><td>OP-050</td><td>焊接</td><td>3min/件</td><td>CO2保护焊机/机器人焊</td><td>160/400件/班</td><td>焊缝外观(GB/T12467)、焊脚高度±1mm、无气孔裂纹</td><td>扫码+人工确认</td><td>机器人焊接参数采集</td></tr>
+<tr><td>7</td><td>OP-060</td><td>校正</td><td>1.5min/件</td><td>校正机/液压校直机</td><td>300件/班</td><td>直线度≤1.5mm/m、整体变形≤3mm</td><td>扫码报工</td><td>-</td></tr>
+<tr><td>8</td><td>OP-070</td><td>打磨</td><td>1.0min/件</td><td>角磨机/砂带机</td><td>480件/班</td><td>焊接飞溅清除、表面无毛刺锐角</td><td>扫码报工</td><td>-</td></tr>
+<tr><td>9</td><td>OP-080</td><td>前处理</td><td>自动线</td><td>脱脂→水洗→磷化→烘干线</td><td>800m²/班</td><td>磷化膜均匀、无油污、烘干120-150°C</td><td>PLC自动记录</td><td>PLC温度/速度采集</td></tr>
+<tr><td>10</td><td>OP-090</td><td>喷塑</td><td>自动线</td><td>静电喷涂线(自动+补喷)</td><td>600m²/班</td><td>膜厚60-80μm、附着力0级、ΔE≤1.5、无漏喷/流挂</td><td>扫码+膜厚仪</td><td>PLC喷涂参数</td></tr>
+<tr><td>11</td><td>OP-100</td><td>固化</td><td>自动线</td><td>固化炉(天然气/电加热)</td><td>与喷涂同步</td><td>温度200±10°C、恒温10-15min、温升曲线记录</td><td>PLC温度曲线自动</td><td>PLC温度采集(30s)</td></tr>
+<tr><td>12</td><td>OP-110</td><td>冷却/检验</td><td>自动线</td><td>冷却段+检验台</td><td>与喷涂同步</td><td>外观全检、膜厚抽检、附着力抽检</td><td>扫码报工</td><td>-</td></tr>
+<tr><td>13</td><td>OP-120</td><td>包装</td><td>按件计</td><td>打包机/缠绕机</td><td>200件/班</td><td>包装规范(立柱缠绕+护角)、标签粘贴、防潮</td><td>扫码+打印标签</td><td>标签打印机</td></tr>
+<tr><td>14</td><td>OP-130</td><td>成品入库</td><td>-</td><td>-</td><td>-</td><td>数量核对、标签扫描、批次记录</td><td>PDA扫码入库</td><td>WMS接口</td></tr>
+</table>
+</div>
+
+<h3>9.2 工艺路线示例</h3>
+<table>
+<tr><th>工艺路线</th><th>产品</th><th>工序序列</th><th>总工时</th></tr>
+<tr><td>RT-HEAVY-UPRIGHT</td><td>重型立柱</td><td>OP-010→OP-020→OP-035→OP-030→OP-070→OP-080→OP-090→OP-100→OP-110→OP-120→OP-130</td><td>10.5min/根</td></tr>
+<tr><td>RT-HEAVY-BEAM</td><td>重型横梁</td><td>OP-010→OP-020→OP-035→OP-030→OP-050→OP-060→OP-080→OP-090→OP-100→OP-110→OP-120→OP-130</td><td>12.2min/根</td></tr>
+<tr><td>RT-PALLET</td><td>钢托盘</td><td>OP-010→OP-020→OP-035→OP-050→OP-060→OP-070→OP-080→OP-090→OP-100→OP-110→OP-120→OP-130</td><td>8.5min/件</td></tr>
+<tr><td>RT-CUSTOM-RACK</td><td>非标料架</td><td>OP-010→OP-020→OP-030→OP-040→OP-050→OP-060→OP-070→OP-080→OP-090→OP-100→OP-110→OP-120→OP-130</td><td>15.5min/件</td></tr>
+</table>
+
+<h3>9.3 MES功能清单（12大功能模块）</h3>
+<table>
+<tr><th>功能</th><th>子功能</th><th>说明</th></tr>
+<tr><td>生产计划</td><td>MPS主计划/产能平衡/排产优化/插单处理</td><td>按项目交期倒排，自动计算产能负荷率</td></tr>
+<tr><td>工单管理</td><td>工单生成/下发/状态跟踪/变更管理</td><td>MO编码：MO-年月-流水，推送至车间看板和PDA</td></tr>
+<tr><td>派工</td><td>自动派工/手动调整/派工看板</td><td>基于设备负载+人员技能+物料齐套</td></tr>
+<tr><td>报工</td><td>扫码报工/PDA报工/批量报工/异常报工</td><td>工单二维码扫描→确认开工/完工→记录工时</td></tr>
+<tr><td>工序流转</td><td>流转卡/在制品追踪/工序间库存</td><td>每批物料附带二维码流转卡，工序间扫码交接</td></tr>
+<tr><td>扫码管理</td><td>物料标签/工单二维码/流转追溯</td><td>扫码追溯全生命周期：原料批次→各工序→操作人→质检</td></tr>
+<tr><td>设备联网</td><td>数据采集/实时监控/设备接口</td><td>PLC→OPC-UA→MQTT→MES，运行状态/产量/能耗/温度</td></tr>
+<tr><td>工时统计</td><td>标准工时库/实际工时/效率分析/计件工资</td><td>按人/班组/工序/产品维度分析工时效率</td></tr>
+<tr><td>质量追溯</td><td>首件检验/过程检验/不良品管理/追溯链</td><td>AQL抽样(GB/T2828.1)，全链可追溯</td></tr>
+<tr><td>异常管理</td><td>异常分类/安灯系统/异常分析</td><td>工位异常一键呼叫，逐级升级，超时自动上报</td></tr>
+<tr><td>OEE分析</td><td>设备OEE/OEE看板/六大损失</td><td>OEE=时间开动率×性能开动率×合格品率</td></tr>
+<tr><td>设备维护</td><td>维护计划/维修记录/备件管理</td><td>日检/周保/月保/年保计划，到期自动提醒</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 10: BOM ===== -->
+<section id="s10"><h2>十、BOM管理</h2>
+<table>
+<tr><th>BOM类型</th><th>层级</th><th>说明</th></tr>
+<tr><td>一级BOM</td><td>成品→零件</td><td>最简单，货架整体→立柱+横梁+层板+配件</td></tr>
+<tr><td>二级BOM</td><td>成品→部件→零件</td><td>含中间装配件，货架→立柱组件(立柱+底板+加劲板)→原材料</td></tr>
+<tr><td>三级BOM</td><td>成品→子部件→部件→零件</td><td>复杂产品，如自动化立库→货架系统+堆垛机+输送线+电控→各子系统→零件</td></tr>
+<tr><td>工程BOM(EBOM)</td><td>设计视角</td><td>按设计方案功能结构组织</td></tr>
+<tr><td>制造BOM(MBOM)</td><td>制造视角</td><td>EBOM+工艺路线+损耗率+包装辅料</td></tr>
+<tr><td>成本BOM(CBOM)</td><td>成本视角</td><td>MBOM+材料单价+工序单价+费用分摊</td></tr>
+</table>
+<p><strong>核心功能：</strong>版本管理(V1.0→V1.1→V2.0)、替代料管理(主料+替代+优先级)、损耗率管理(钢板3%/型钢2%/喷粉5%/螺栓1%)、BOM比较、多层级展开、反查影响分析。</p>
+</section>
+
+<!-- ===== SECTION 11: WMS ===== -->
+<section id="s11"><h2>十一、库存WMS</h2>
+<h3>11.1 仓库类型</h3>
+<table>
+<tr><th>仓库类型</th><th>存储物料</th><th>库位编码</th></tr>
+<tr><td>原料仓</td><td>钢卷、钢板、方管、型钢、焊丝、喷粉</td><td>RM-A-01-001 (原料仓-A区-1排-1号)</td></tr>
+<tr><td>半成品仓</td><td>开平料、冲孔件、折弯件(工序间暂存)</td><td>SF-B-02-003</td></tr>
+<tr><td>成品仓</td><td>已完成包装的货架组件</td><td>FG-C-01-005</td></tr>
+<tr><td>备件仓</td><td>设备备件、易损件</td><td>SP-D-01-001</td></tr>
+<tr><td>安装物料仓</td><td>螺栓、垫片、化学锚栓等安装辅材</td><td>IM-E-01-001</td></tr>
+</table>
+<h3>11.2 WMS功能</h3>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>二维码/条码</td><td>所有物料入库生成唯一二维码标签(Code128)，含物料编码+批次+数量+日期</td></tr>
+<tr><td>PDA作业</td><td>收货上架、拣货下架、移库、盘点，全部通过PDA扫码完成</td></tr>
+<tr><td>批次管理</td><td>原材料按钢卷号/炉号追溯，成品按生产工单批次管理</td></tr>
+<tr><td>先进先出(FIFO)</td><td>系统推荐最优先出库批次，按入库日期排序</td></tr>
+<tr><td>库存预警</td><td>安全库存下限、呆滞库存(>90天未动)、保质期预警(喷粉>6个月)</td></tr>
+<tr><td>盘点管理</td><td>循环盘点(ABC分类)、全面盘点、盲盘模式，盘点差异分析</td></tr>
+<tr><td>库位管理</td><td>库区→巷道→排→层→位 五级库位，可视化库位地图</td></tr>
+<tr><td>出库策略</td><td>FIFO/按批次指定/按项目锁定(项目物料锁定不可挪用)</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 12: 成本核算 ===== -->
+<section id="s12"><h2>十二、成本核算（重点） <span class="badge-core">核心</span></h2>
+<div class="highlight"><strong>目标：</strong>全口径成本模型，单件/订单/项目/客户/产品五维分析，误差&lt;2%。</div>
+
+<h3>12.1 成本构成</h3>
+<table>
+<tr><th>成本大类</th><th>成本项</th><th>计算方式</th><th>数据来源</th></tr>
+<tr><td rowspan="4">材料成本</td><td>钢材</td><td>Σ(物料理论重量kg×钢材单价元/kg)×(1+损耗率)</td><td>采购价格库+钢材行情API</td></tr>
+<tr><td>喷粉</td><td>喷涂面积m²×喷粉单价元/m²</td><td>面积自动计算+喷粉单价库</td></tr>
+<tr><td>辅料</td><td>焊丝:0.02kg/m×单价;螺栓/护角:数量×单价</td><td>辅料定额BOM</td></tr>
+<tr><td>包装</td><td>重型30/中型45/轻型60元/吨</td><td>包装定额表</td></tr>
+<tr><td rowspan="4">制造成本</td><td>直接人工</td><td>Σ(工序实际工时×工序人工费率)</td><td>MES工时采集</td></tr>
+<tr><td>设备折旧</td><td>设备原值×(1-残值率)÷折旧年限÷年额定工时×实际工时</td><td>固定资产台账</td></tr>
+<tr><td>能耗</td><td>电表采集×电费单价+天然气表×气费单价</td><td>能源计量+分时电价</td></tr>
+<tr><td>模具摊销</td><td>模具成本÷额定冲次×实际冲次</td><td>模具管理台账</td></tr>
+<tr><td rowspan="4">间接费用</td><td>管理人工</td><td>管理人员薪酬÷当月总产值×订单产值</td><td>HR薪酬数据</td></tr>
+<tr><td>销售费用</td><td>(薪酬+差旅+展会+佣金)÷当月签单额×订单金额</td><td>费用报销</td></tr>
+<tr><td>财务费用</td><td>项目垫资金额×年利率÷360×回款周期(天)</td><td>资金台账</td></tr>
+<tr><td>运输费用</td><td>按距离/重量/体积</td><td>物流报价库+里程API</td></tr>
+</table>
+
+<h3>12.2 核算维度与差异分析</h3>
+<p><strong>维度：</strong>单件成本卡 → 订单成本分析表 → 项目成本核算表 → 客户利润贡献排名 → 产品线利润分析 → 项目利润看板</p>
+<p><strong>差异分析：</strong>标准成本(报价估算) vs 实际成本 差异率自动计算。差异率>3%自动预警，触发成本复盘。差异分解：材料价差/量差(损耗率)/工时差/费率差。</p>
+</section>
+
+<!-- ===== SECTION 13: 财务 ===== -->
+<section id="s13"><h2>十三、财务模块</h2>
+<table>
+<tr><th>模块</th><th>功能点</th><th>说明</th></tr>
+<tr><td>总账</td><td>科目体系、凭证管理、月结/年结、辅助核算(项目/部门/客户/供应商)</td><td>支持多会计准则，科目体系按新企业会计准则</td></tr>
+<tr><td>应收管理</td><td>应收立账、收款核销、账龄分析(30/60/90/180天)、坏账计提</td><td>回款计划跟踪，逾期自动提醒+催收记录</td></tr>
+<tr><td>应付管理</td><td>应付立账、付款申请、付款审批、账龄分析</td><td>三单匹配(采购单+入库单+发票)</td></tr>
+<tr><td>资金管理</td><td>银行账户管理、资金日报、资金计划、银企直连</td><td>对接网银API，自动获取流水</td></tr>
+<tr><td>费用报销</td><td>费用申请→报销→审批→付款</td><td>费用标准控制、超标预警</td></tr>
+<tr><td>固定资产</td><td>资产卡片、折旧计提、资产盘点、处置</td><td>设备类资产关联MES设备管理</td></tr>
+<tr><td>发票管理</td><td>销项发票(对接金税)、进项发票(OCR识别)、发票认证</td><td>电子发票归档</td></tr>
+<tr><td>税务管理</td><td>增值税(13%)、企业所得税(25%)、附加税、印花税</td><td>纳税申报表自动生成</td></tr>
+</table>
+<p><strong>自动生成报表：</strong>资产负债表、利润表、现金流量表、项目利润表、客户利润表。</p>
+</section>
+
+<!-- ===== SECTION 14: HR ===== -->
+<section id="s14"><h2>十四、人力资源管理</h2>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>组织架构</td><td>公司→部门→班组 三级组织树，含编制管理</td></tr>
+<tr><td>员工档案</td><td>基本信息、岗位、入职日期、合同日期、技能证书(焊工证等)、资质</td></tr>
+<tr><td>考勤管理</td><td>指纹/人脸打卡、请假(年假/事假/病假)、加班、出差</td></tr>
+<tr><td>排班管理</td><td>白班/夜班/轮班，车间排班表，关联生产计划</td></tr>
+<tr><td>绩效管理</td><td>KPI考核(产量/质量/安全/出勤)，月度评分，绩效系数</td></tr>
+<tr><td>计件工资</td><td>按MES报工数量×工序计件单价，自动计算，支持集体计件分配</td></tr>
+<tr><td>计时工资</td><td>基本工资+岗位津贴+加班费+全勤奖</td></tr>
+<tr><td>生产奖金</td><td>超产奖、质量奖、安全奖，按规则自动计算</td></tr>
+<tr><td>安装奖金</td><td>按安装项目：安装量×单价+效率奖金+客户满意度奖金</td></tr>
+<tr><td>培训管理</td><td>培训计划、培训记录、技能矩阵、上岗证管理</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 15: 安装 ===== -->
+<section id="s15"><h2>十五、安装管理</h2>
+<div class="flow"><span class="flow-node">发货确认</span><span class="flow-arrow">→</span><span class="flow-node">安装计划</span><span class="flow-arrow">→</span><span class="flow-node">人员安排</span><span class="flow-arrow">→</span><span class="flow-node">进场施工</span><span class="flow-arrow">→</span><span class="flow-node">安装报工</span><span class="flow-arrow">→</span><span class="flow-node">自检</span><span class="flow-arrow">→</span><span class="flow-node">客户签收</span><span class="flow-arrow">→</span><span class="flow-node">验收</span></div>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>安装计划</td><td>安装开始/结束日期、安装地址、安装要求、安全交底</td></tr>
+<tr><td>人员安排</td><td>安装队长+安装工、人员资质(高空作业证)、保险状态校验</td></tr>
+<tr><td>安装工时</td><td>PDA移动报工：开工/完工扫码、工时记录、加班记录</td></tr>
+<tr><td>安装成本</td><td>人工费+差旅费+住宿费+工具消耗+辅材消耗</td></tr>
+<tr><td>现场问题</td><td>缺件、损坏、设计变更、客户追加需求，拍照上传</td></tr>
+<tr><td>客户签收</td><td>电子签收单(PDA手写签名)、拍照留档</td></tr>
+<tr><td>验收管理</td><td>竣工验收报告、验收问题整改跟踪、质保期起算</td></tr>
+<tr><td>安装利润</td><td>安装收入(合同安装费)-安装实际成本=安装利润</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 16: 售后 ===== -->
+<section id="s16"><h2>十六、售后管理</h2>
+<div class="flow"><span class="flow-node">客户报修</span><span class="flow-arrow">→</span><span class="flow-node">工单创建</span><span class="flow-arrow">→</span><span class="flow-node">派工</span><span class="flow-arrow">→</span><span class="flow-node">现场维修</span><span class="flow-arrow">→</span><span class="flow-node">维修报告</span><span class="flow-arrow">→</span><span class="flow-node">客户评价</span><span class="flow-arrow">→</span><span class="flow-node">结案</span></div>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>报修</td><td>客户通过电话/微信/客户门户提交报修，描述问题、上传照片</td></tr>
+<tr><td>工单管理</td><td>自动生成售后工单(SV+年月+流水)，关联原项目/合同，判断质保状态</td></tr>
+<tr><td>派工</td><td>按问题类型+区域自动派工或手动指定，推送到售后工程师APP</td></tr>
+<tr><td>维修记录</td><td>问题描述、原因分析、处理方案、更换备件明细、维修工时、费用</td></tr>
+<tr><td>备件管理</td><td>售后备件库存(独立仓)、备件领用、旧件退回、备件成本核算</td></tr>
+<tr><td>客户满意度</td><td>维修完成后推送评价(1-5星)，不满意自动升级处理</td></tr>
+<tr><td>质保管理</td><td>质保期计算(按验收日)、质保金到期提醒、质保期间问题统计</td></tr>
+<tr><td>售后成本</td><td>按项目/客户统计售后成本，分析售后成本率，反馈设计/生产改进</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 17: BI ===== -->
+<section id="s17"><h2>十七、BI数据分析</h2>
+<h3>17.1 七大看板KPI指标清单</h3>
+
+<h4>销售看板</h4>
+<table>
+<tr><th>KPI</th><th>计算方式</th><th>刷新</th></tr>
+<tr><td>月度签单额</td><td>Σ当月签订合同金额</td><td>实时</td></tr>
+<tr><td>报价转化率</td><td>成交询价数/总询价数</td><td>日</td></tr>
+<tr><td>商机转化率</td><td>赢单数/商机总数</td><td>月</td></tr>
+<tr><td>平均报价周期</td><td>Σ(报价日期-询价日期)/询价数</td><td>月</td></tr>
+<tr><td>客户流失率</td><td>12个月未交易客户数/总客户数</td><td>月</td></tr>
+</table>
+
+<h4>生产看板（核心）</h4>
+<table>
+<tr><th>KPI</th><th>计算方式</th><th>刷新</th></tr>
+<tr><td>当日产量(吨)</td><td>Σ当日完工成品重量</td><td>实时</td></tr>
+<tr><td>计划达成率</td><td>实际产量/计划产量</td><td>实时</td></tr>
+<tr><td>综合OEE</td><td>时间开动率×性能开动率×合格品率</td><td>实时</td></tr>
+<tr><td>不良品率</td><td>不良品数量/总产量</td><td>实时</td></tr>
+<tr><td>在制品金额</td><td>Σ各工序在制品物料成本</td><td>日</td></tr>
+<tr><td>设备故障率</td><td>故障停机时间/计划运行时间</td><td>日</td></tr>
+<tr><td>喷涂线速度</td><td>链速(m/min)实时值</td><td>实时</td></tr>
+</table>
+
+<h4>库存看板</h4>
+<table>
+<tr><th>KPI</th><th>计算方式</th><th>刷新</th></tr>
+<tr><td>库存总金额</td><td>Σ(库存数量×移动平均单价)</td><td>实时</td></tr>
+<tr><td>库存周转天数</td><td>平均库存/日均出库金额</td><td>月</td></tr>
+<tr><td>呆滞库存金额</td><td>90天未动库存金额</td><td>周</td></tr>
+<tr><td>安全库存预警</td><td>低于安全库存的物料清单</td><td>实时</td></tr>
+</table>
+
+<h4>财务看板</h4>
+<table>
+<tr><th>KPI</th><th>计算方式</th><th>刷新</th></tr>
+<tr><td>营业收入(月)</td><td>Σ当月确认收入</td><td>实时</td></tr>
+<tr><td>毛利率</td><td>(收入-成本)/收入</td><td>月</td></tr>
+<tr><td>应收账款总额</td><td>Σ未收回应收账款</td><td>实时</td></tr>
+<tr><td>现金流余额</td><td>Σ银行账户余额</td><td>实时</td></tr>
+</table>
+
+<h4>项目利润看板</h4>
+<table>
+<tr><th>KPI</th><th>计算方式</th><th>刷新</th></tr>
+<tr><td>在途项目数</td><td>进行中(合同→验收)项目总数</td><td>实时</td></tr>
+<tr><td>在途合同总额</td><td>Σ进行中项目合同总额</td><td>实时</td></tr>
+<tr><td>项目毛利率排名</td><td>按(合同额-成本)/合同额排名</td><td>月</td></tr>
+<tr><td>延期项目预警</td><td>超出计划完工日期项目清单</td><td>实时</td></tr>
+<tr><td>成本超支项目</td><td>实际成本>预算105%项目</td><td>实时</td></tr>
+</table>
+
+<h4>董事长驾驶舱（核心8指标）</h4>
+<table>
+<tr><th>KPI</th><th>说明</th></tr>
+<tr><td>今日实时产值</td><td>当日截至当前生产完工产值(按合同金额折算)</td></tr>
+<tr><td>本月签单/回款/利润</td><td>月度核心三大指标 vs 目标对比</td></tr>
+<tr><td>现金流余额</td><td>实时资金状况</td></tr>
+<tr><td>应收账款TOP10</td><td>按金额排序，标注逾期天数</td></tr>
+<tr><td>产能负荷率</td><td>各产线/工厂当前产能利用率</td></tr>
+<tr><td>重大项目进度</td><td>金额TOP10项目进度条+状态</td></tr>
+<tr><td>客户满意度</td><td>本月售后评价平均分</td></tr>
+<tr><td>利润趋势图</td><td>近12个月毛利/净利趋势</td></tr>
+</table>
+</section>
+
+<!-- ===== SECTION 18: 数据库设计 ===== -->
+<section id="s18"><h2>十八、数据库设计</h2>
+<h3>18.1 数据表清单（核心表共52张）</h3>
+<h4>主数据域 — 12张</h4>
+<table><tr><th>表名</th><th>说明</th><th>核心字段</th></tr>
+<tr><td>sys_company</td><td>公司</td><td>id,company_code,company_name,tax_id,status</td></tr>
+<tr><td>sys_plant</td><td>工厂</td><td>id,plant_code,plant_name,company_id,address</td></tr>
+<tr><td>sys_warehouse</td><td>仓库</td><td>id,wh_code,wh_name,plant_id,wh_type(原料/半成品/成品/备件/安装)</td></tr>
+<tr><td>sys_location</td><td>库位</td><td>id,loc_code,wh_id,zone,aisle,row,tier,position</td></tr>
+<tr><td>sys_department</td><td>部门</td><td>id,dept_code,dept_name,parent_id,company_id,manager_id</td></tr>
+<tr><td>sys_employee</td><td>员工</td><td>id,emp_code,emp_name,dept_id,position,skill_level,hire_date</td></tr>
+<tr><td>sys_user</td><td>用户</td><td>id,username,password_hash,emp_id,status</td></tr>
+<tr><td>sys_role</td><td>角色</td><td>id,role_code,role_name,role_level,data_scope</td></tr>
+<tr><td>sys_user_role</td><td>用户角色</td><td>user_id,role_id</td></tr>
+<tr><td>sys_permission</td><td>权限</td><td>id,perm_code,perm_name,perm_type(menu/button/api),parent_id</td></tr>
+<tr><td>sys_role_permission</td><td>角色权限</td><td>role_id,perm_id</td></tr>
+<tr><td>mdm_material</td><td>物料主数据</td><td>id,mat_code,mat_name,mat_type,spec,unit,material_grade,surface_treatment,color,std_weight,unit_price,loss_rate,safety_stock</td></tr></table>
+
+<h4>销售与BOM域 — 14张</h4>
+<table><tr><th>表名</th><th>说明</th><th>核心关联</th></tr>
+<tr><td>crm_customer</td><td>客户档案</td><td>cust_code,cust_level(A/B/C/D),credit_limit,payment_days</td></tr>
+<tr><td>crm_opportunity</td><td>商机</td><td>opp_code,cust_id,est_amount,success_rate,opp_stage</td></tr>
+<tr><td>crm_inquiry</td><td>询价单</td><td>rfq_code,cust_id,rack_type,status(待报价/报价中/已报价/已成交/已失单)</td></tr>
+<tr><td>crm_quotation</td><td>报价单</td><td>quot_code,rfq_id,version,currency,total_amount,material_cost,profit_rate</td></tr>
+<tr><td>bom_header</td><td>BOM头</td><td>bom_code,bom_type(EBOM/MBOM/CBOM),project_id,version,status</td></tr>
+<tr><td>bom_detail</td><td>BOM明细</td><td>bom_id,parent_mat_id,mat_id,qty_per_unit,loss_rate,is_alternative</td></tr>
+<tr><td>prd_rack_type</td><td>货架类型</td><td>type_code,type_name,param_template(JSON)</td></tr>
+<tr><td>prd_process_route</td><td>工艺路线</td><td>route_code,rack_type_id,product_part,std_total_hours</td></tr></table>
+
+<h4>业务域 — 26张</h4>
+<table><tr><th>域</th><th>核心表</th><th>说明</th></tr>
+<tr><td>合同/项目</td><td>ctr_contract, ctr_payment_plan, prj_project, prj_stage, prj_cost</td><td>合同+回款+项目+阶段+成本</td></tr>
+<tr><td>采购</td><td>pur_supplier, pur_price, pur_requisition, pur_order, pur_order_detail</td><td>供应商+价格库+申请+订单+明细</td></tr>
+<tr><td>MES</td><td>mes_work_order, mes_wo_operation, mes_dispatch, mes_labor_report, mes_flow_card, mes_machine, mes_quality_check, mes_defect, mes_exception, mes_oee, mes_maintenance</td><td>工单+工序+派工+报工+流转卡+设备+质检+不良品+异常+OEE+维护</td></tr>
+<tr><td>WMS</td><td>wms_inventory, wms_receipt, wms_shipment, wms_count</td><td>库存+入库+出库+盘点</td></tr>
+<tr><td>安装/售后</td><td>ins_plan, ins_report, svc_ticket</td><td>安装计划+安装报工+售后工单</td></tr>
+<tr><td>财务</td><td>fin_voucher, fin_voucher_detail, fin_account</td><td>凭证+凭证明细+科目</td></tr></table>
+
+<h3>18.2 索引设计原则</h3>
+<table>
+<tr><th>索引类型</th><th>适用场景</th><th>示例</th></tr>
+<tr><td>主键索引</td><td>所有表id字段(UUID或自增)</td><td>PRIMARY KEY (id)</td></tr>
+<tr><td>唯一索引</td><td>编码字段</td><td>UNIQUE (mat_code), UNIQUE (project_code)</td></tr>
+<tr><td>复合索引</td><td>高频查询组合</td><td>INDEX (project_id,status), INDEX (cust_id,created_at)</td></tr>
+<tr><td>外键索引</td><td>关联字段</td><td>INDEX (project_id), INDEX (mo_id)</td></tr>
+<tr><td>时间索引</td><td>时序数据</td><td>INDEX (created_at DESC), INDEX (plan_start)</td></tr>
+</table>
+
+<h3>18.3 核心数据关系</h3>
+<ul style="margin:16px;padding-left:20px">
+<li><strong>项目贯穿线：</strong>project_id 关联 prj_project→ctr_contract→crm_quotation→bom_header→mes_work_order→pur_order→wms_shipment→ins_plan→svc_ticket</li>
+<li><strong>BOM展开链：</strong>bom_header→bom_detail(递归parent_mat_id)→mdm_material</li>
+<li><strong>生产流程链：</strong>mes_work_order→mes_wo_operation→mes_dispatch→mes_labor_report→mes_flow_card→mes_quality_check</li>
+<li><strong>成本归集链：</strong>mdm_material.unit_price+mes_labor_report.actual_hours+wms_inventory.unit_cost→prj_cost</li>
+</ul>
+</section>
+
+<!-- ===== SECTION 19: 权限矩阵 ===== -->
+<section id="s19"><h2>十九、权限矩阵</h2>
+<h3>19.1 功能权限矩阵（C=创建 R=读取 U=更新 D=删除 A=审批）</h3>
+<div style="overflow-x:auto">
+<table style="font-size:11px;min-width:1100px">
+<tr><th>模块</th><th>董事长</th><th>总经理</th><th>销售经理</th><th>设计经理</th><th>采购经理</th><th>生产经理</th><th>仓库主管</th><th>财务经理</th><th>安装经理</th><th>普通员工</th></tr>
+<tr><td>客户管理</td><td>ALL</td><td>ALL</td><td>CRUD</td><td>R</td><td>R</td><td>-</td><td>-</td><td>R</td><td>R</td><td>R(own)</td></tr>
+<tr><td>商机管理</td><td>ALL</td><td>ALL</td><td>CRUD</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>CRU(own)</td></tr>
+<tr><td>询价报价</td><td>ALL</td><td>A</td><td>CRUD</td><td>R</td><td>-</td><td>R</td><td>-</td><td>R</td><td>-</td><td>CRU(own)</td></tr>
+<tr><td>方案设计</td><td>ALL</td><td>R</td><td>R</td><td>CRUD</td><td>-</td><td>R</td><td>-</td><td>-</td><td>-</td><td>CRU(own)</td></tr>
+<tr><td>货架配置器</td><td>ALL</td><td>R</td><td>R</td><td>CRUD</td><td>-</td><td>R</td><td>-</td><td>-</td><td>-</td><td>RU</td></tr>
+<tr><td>BOM管理</td><td>ALL</td><td>A</td><td>R</td><td>CRUD</td><td>R</td><td>RU</td><td>-</td><td>R</td><td>-</td><td>R</td></tr>
+<tr><td>合同管理</td><td>ALL</td><td>A</td><td>CRUD</td><td>R</td><td>R</td><td>R</td><td>-</td><td>RU</td><td>R</td><td>-</td></tr>
+<tr><td>项目管理</td><td>ALL</td><td>ALL</td><td>RU</td><td>RU</td><td>RU</td><td>RU</td><td>R</td><td>RU</td><td>RU</td><td>R</td></tr>
+<tr><td>采购管理</td><td>ALL</td><td>A</td><td>-</td><td>-</td><td>CRUD</td><td>R</td><td>R</td><td>A</td><td>-</td><td>CRU(own)</td></tr>
+<tr><td>MES生产</td><td>ALL</td><td>R</td><td>-</td><td>-</td><td>-</td><td>CRUD</td><td>R</td><td>R</td><td>-</td><td>RU(own)</td></tr>
+<tr><td>WMS仓储</td><td>ALL</td><td>R</td><td>-</td><td>-</td><td>R</td><td>R</td><td>CRUD</td><td>R</td><td>R</td><td>CRU(own)</td></tr>
+<tr><td>成本核算</td><td>ALL</td><td>R</td><td>-</td><td>-</td><td>-</td><td>R</td><td>-</td><td>CRUD</td><td>-</td><td>-</td></tr>
+<tr><td>财务总账</td><td>ALL</td><td>R</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>CRUD</td><td>-</td><td>-</td></tr>
+<tr><td>应收应付</td><td>ALL</td><td>R</td><td>R(own)</td><td>-</td><td>R(own)</td><td>-</td><td>-</td><td>CRUD</td><td>-</td><td>-</td></tr>
+<tr><td>人力资源</td><td>ALL</td><td>RU</td><td>R</td><td>R</td><td>R</td><td>RU</td><td>R</td><td>R</td><td>R</td><td>R(own)</td></tr>
+<tr><td>安装管理</td><td>ALL</td><td>RU</td><td>R</td><td>-</td><td>-</td><td>R</td><td>-</td><td>R</td><td>CRUD</td><td>CRU(own)</td></tr>
+<tr><td>售后管理</td><td>ALL</td><td>RU</td><td>RU</td><td>-</td><td>-</td><td>R</td><td>-</td><td>R</td><td>CRUD</td><td>CRU(own)</td></tr>
+<tr><td>BI看板</td><td>ALL</td><td>ALL</td><td>R(own)</td><td>R(own)</td><td>R(own)</td><td>R(own)</td><td>R(own)</td><td>R(own)</td><td>R(own)</td><td>-</td></tr>
+</table></div>
+<div class="info-box"><strong>说明：</strong>"ALL"=全部权限；"R(own)"=仅查看与自己相关的数据；"CRU(own)"=可对自己数据增删改。数据权限按部门/工厂/仓库行级隔离。权限采用四维模型：功能权限+数据权限+审批权限+字段权限。</div>
+</section>
+
+<!-- ===== SECTION 20: 最终输出 ===== -->
+<section id="s20"><h2>二十、最终输出与实施路线</h2>
+
+<h3>20.1 ERP整体蓝图</h3>
+<p>以<strong>项目管理为主线、BOM为核心数据中枢、MES为制造执行引擎、财务为管控闭环</strong>，构建覆盖货架制造企业全价值链的一体化数字平台。支撑企业从年产值1亿到10亿+的规模化增长。</p>
+
+<h3>20.2 模块清单与优先级</h3>
+<table>
+<tr><th>编号</th><th>一级模块</th><th>子模块数</th><th>优先级</th></tr>
+<tr><td>M01</td><td>系统管理(MDM+权限)</td><td>6</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M02</td><td>销售CRM</td><td>5</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M03</td><td>方案设计+图文档</td><td>3</td><td><span class="badge-p1">P1</span></td></tr>
+<tr><td>M04</td><td>货架配置器</td><td>4</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M05</td><td>报价引擎</td><td>3</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M06</td><td>合同管理</td><td>3</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M07</td><td>项目管理</td><td>4</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M08</td><td>BOM管理</td><td>4</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M09</td><td>采购管理+SRM</td><td>5</td><td><span class="badge-p1">P1</span></td></tr>
+<tr><td>M10</td><td>MES生产执行</td><td>12</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M11</td><td>WMS仓储管理</td><td>4</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M12</td><td>成本核算引擎</td><td>3</td><td><span class="badge-p0">P0</span></td></tr>
+<tr><td>M13</td><td>财务总账+应收应付</td><td>5</td><td><span class="badge-p1">P1</span></td></tr>
+<tr><td>M14</td><td>人力资源</td><td>3</td><td><span class="badge-p2">P2</span></td></tr>
+<tr><td>M15</td><td>安装管理</td><td>2</td><td><span class="badge-p1">P1</span></td></tr>
+<tr><td>M16</td><td>售后管理</td><td>2</td><td><span class="badge-p2">P2</span></td></tr>
+<tr><td>M17</td><td>BI决策分析</td><td>3</td><td><span class="badge-p2">P2</span></td></tr>
+<tr><td>M18</td><td>AI自动报价</td><td>1</td><td><span class="badge-p2">P2</span></td></tr>
+<tr><td>M19</td><td>AI智能排产</td><td>1</td><td><span class="badge-p2">P2</span></td></tr>
+<tr><td>M20</td><td>AI成本预测</td><td>1</td><td><span class="badge-p2">P2</span></td></tr>
+</table>
+
+<h3>20.3 MVP版本规划</h3>
+<table>
+<tr><th>版本</th><th>范围</th><th>周期</th><th>里程碑</th></tr>
+<tr><td>MVP V1.0</td><td>MDM+权限+客户+询价+配置器+BOM+报价+合同+项目+采购+MES基础(工单+报工+扫码)+WMS基础(出入库+库存)</td><td>6个月</td><td>打通核心业务链：客户→报价→合同→生产→入库→发货</td></tr>
+<tr><td>V2.0 增强版</td><td>成本核算引擎+MES增强(设备联网+OEE+质量追溯)+WMS增强(PDA全流程+批次+库位)+方案设计+财务总账+安装管理</td><td>3个月</td><td>成本管控闭环+设备联网+移动化</td></tr>
+<tr><td>V3.0 完整版</td><td>BI决策分析+驾驶舱+人力资源+售后管理+AI自动报价+AI智能排产+AI成本预测</td><td>3个月</td><td>智能化+数据驱动决策</td></tr>
+</table>
+
+<h3>20.4 实施路线图</h3>
+<table>
+<tr><th>时间</th><th>里程碑</th><th>产出</th></tr>
+<tr><td>第1-2月</td><td>基础平台搭建</td><td>微服务框架、CI/CD、数据库、MDM主数据、权限、客户管理、询价</td></tr>
+<tr><td>第3-4月</td><td>核心业务上线</td><td>货架配置器、BOM管理、报价引擎、合同管理、项目管理</td></tr>
+<tr><td>第5-6月</td><td>制造闭环上线</td><td>采购管理、MES基础、WMS基础、发货管理(MVP完成)</td></tr>
+<tr><td>第7-8月</td><td>成本财务上线</td><td>成本核算引擎、财务总账、MES增强(设备联网+质量+OEE)</td></tr>
+<tr><td>第9-10月</td><td>全模块上线</td><td>方案设计+图文档、安装管理、售后管理、WMS增强</td></tr>
+<tr><td>第11-12月</td><td>智能化上线</td><td>BI决策分析+驾驶舱、HR模块、AI三大模块</td></tr>
+</table>
+
+<h3>20.5 团队配置与周期</h3>
+<table>
+<tr><th>角色</th><th>人数</th><th>职责</th></tr>
+<tr><td>项目经理</td><td>1人</td><td>整体进度、需求管理、客户沟通</td></tr>
+<tr><td>架构师</td><td>1人</td><td>技术架构、数据库设计、代码评审</td></tr>
+<tr><td>后端开发</td><td>4-5人</td><td>Java微服务开发</td></tr>
+<tr><td>前端开发</td><td>3人</td><td>Web管理端+移动端+大屏</td></tr>
+<tr><td>MES/WMS开发</td><td>2人</td><td>设备对接、PDA终端、PLC采集</td></tr>
+<tr><td>测试工程师</td><td>2人</td><td>功能测试、性能测试、自动化测试</td></tr>
+<tr><td>UI/UX设计师</td><td>1人</td><td>界面设计、交互设计</td></tr>
+<tr><td>实施顾问</td><td>2人</td><td>工厂调研、用户培训、上线支持</td></tr>
+<tr><td><strong>合计</strong></td><td><strong>16-18人</strong></td><td><strong>总周期：12个月（MVP 6个月）</strong></td></tr>
+</table>
+
+<h3>20.6 AI方案</h3>
+
+<h4>AI自动报价</h4>
+<ul style="margin:12px;padding-left:20px">
+<li><strong>数据基础：</strong>历史报价数据(报价单+实际成本+成交价)、材料行情API、竞品价格情报</li>
+<li><strong>模型：</strong>XGBoost/LightGBM报价预测模型，输入货架类型+规格+数量+地区+客户等级+材料行情，输出建议报价区间</li>
+<li><strong>效果：</strong>报价效率提升80%，报价准确度(成交价偏差)控制在5%以内</li>
+</ul>
+
+<h4>AI智能排产</h4>
+<ul style="margin:12px;padding-left:20px">
+<li><strong>优化目标：</strong>最小化总完工时间(Makespan)、最大化设备利用率、最小化换模/换色时间</li>
+<li><strong>约束：</strong>设备产能、人员排班、物料齐套、交期优先级、工序先后关系</li>
+<li><strong>算法：</strong>遗传算法(GA)+约束规划(CP)混合求解，输出每台设备/工位的工序排程表(到小时级)</li>
+</ul>
+
+<h4>AI成本预测</h4>
+<ul style="margin:12px;padding-left:20px">
+<li><strong>预测维度：</strong>钢材价格走势(Prophet/LSTM时序预测)、工时效率趋势、能耗季节性波动</li>
+<li><strong>应用：</strong>报价时自动预测未来3个月钢材价格和制造成本变化，辅助长期合同定价决策</li>
+</ul>
+
+<h3>20.7 预估页面与API清单</h3>
+<table>
+<tr><th>类别</th><th>数量</th><th>说明</th></tr>
+<tr><td>总模块数</td><td>20个一级模块，72个二级子模块</td><td>覆盖全价值链</td></tr>
+<tr><td>预估页面数</td><td>~180页</td><td>含Web管理端+PDA+大屏+移动端+客户/供应商门户</td></tr>
+<tr><td>预估API数</td><td>~350+ REST API</td><td>17个微服务对外接口</td></tr>
+<tr><td>核心数据表</td><td>52张主业务表</td><td>不含日志/审计/配置等辅助表</td></tr>
+</table>
+
+<div class="highlight" style="margin-top:32px">
+<strong>文档版本：</strong>V1.0 | <strong>编制日期：</strong>2026-06-16 | <strong>适用范围：</strong>货架制造企业ERP系统软件开发需求规格说明书 | <strong>密级：</strong>内部机密 | <strong>编制：</strong>QINC ERP架构组
+</div>
+</section>
+
+</div>
+</body>
+</html>
